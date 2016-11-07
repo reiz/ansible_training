@@ -52,4 +52,18 @@ ubuntu/xenial64 (virtualbox, 20161029.0.0)
 ubuntu/xenial64 (virtualbox, 20161104.0.0)
 ```
 
+You can check which boxes are outdated with this command:
+
+```
+vagrant box outdated
+```
+
+Old versions can be removed like in this example:
+
+```
+vagrant box remove ubuntu/trusty64 --box-version 20161020.0.6
+```
+
+The above command would remove the outdated version `20161020.0.6` of the
+`ubuntu/trusty64` box.
 
