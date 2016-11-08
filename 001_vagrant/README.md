@@ -78,7 +78,7 @@ vagrant init ubuntu/xenial64
 Vagrant will output a Vagrantfile into the current directory.
 A Vagrantfile describes one or multiple virtual machines.
 The generated Vagrantfile is a very simple example with many comments in it.
-It descrbes 1 virtual machines which is bade on the ubuntu/xenial64 box.
+It descrbes 1 virtual machines which is based on the ubuntu/xenial64 box.
 The VM can be started like that:
 
 ```
@@ -117,3 +117,14 @@ With this command we can login to the instance:
 vagrant ssh
 ```
 
+## Vagrant destroy
+
+The VM can be completely removed by this command:
+
+```
+vagrant destroy
+```
+
+That command removes the virtual machine from VirtualBox. That does NOT remove
+the Vagrant box. The Vagrant box `ubuntu/xenial64` which was used to create the
+VM is still on the hard disc and can be used to build new VMs.
