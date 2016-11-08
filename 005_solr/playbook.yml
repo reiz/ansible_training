@@ -8,6 +8,7 @@
     solr_dir: /opt/solr
     solr_version: 6.2.1
     solr_checksum: sha1:413c7fd12561029532f5b10d1d3a51f3a641be88
+    java_version: 8
 
   pre_tasks:
     - name: Update apt cache if needed.
@@ -19,7 +20,7 @@
 
   tasks:
     - name: Install Java.
-      apt: name=openjdk-8-jdk state=present
+      apt: name=openjdk-{{ java_version }}-jdk state=present
 
     - name: Download Solr.
       get_url:
