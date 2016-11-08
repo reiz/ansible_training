@@ -23,8 +23,38 @@ is using includes.
 
 Refactor the playbook:
 
- - create 2 roles, one for java and one for solr
- - assign the 2 roles to the playbook
+ - create a role for java
+ - create a role for solr
+ - copy the `log4j.properties` file to the server to `/var/solr/log4j.properties` and notify solr restart.
+
+Content of `log4j.properties`:
+
+```
+#  Logging level
+solr.log=${solr.solr.home}/../logs
+log4j.rootLogger=INFO, file, CONSOLE
+
+log4j.appender.CONSOLE=org.apache.log4j.ConsoleAppender
+
+log4j.appender.CONSOLE.layout=org.apache.log4j.EnhancedPatternLayout
+log4j.appender.CONSOLE.layout.ConversionPattern=%-4r %-5p (%t) [%X{collection} %X{shard} %X{replica} %X{core}] %c{1.} %m%n
+
+#- size rotation with log cleanup.
+log4j.appender.file=org.apache.log4j.RollingFileAppender
+log4j.appender.file.MaxFileSize=6MB
+log4j.appender.file.MaxBackupIndex=11
+
+#- File to log to and log format
+log4j.appender.file.File=${solr.log}/solr.log
+log4j.appender.file.layout=org.apache.log4j.EnhancedPatternLayout
+log4j.appender.file.layout.ConversionPattern=%d{yyyy-MM-dd HH:mm:ss.SSS} %-5p (%t) [%X{collection} %X{shard} %X{replica} %X{core}] %c{1.} %m%n
+
+log4j.logger.org.apache.zookeeper=WARN
+log4j.logger.org.apache.hadoop=WARN
+
+# set to INFO to enable infostream log messages
+log4j.logger.org.apache.solr.update.LoggingInfoStream=OFF
+```
 
 After you are done with refactoring run:
 
