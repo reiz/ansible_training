@@ -1,0 +1,29 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+
+  config.vm.box = "ubuntu/xenial64"
+  config.vm.synced_folder ".", "/vagrant", disabled: true
+
+  config.vm.provider "virtualbox" do |vb|
+    vb.memory = 1024
+    vb.cpus = 2
+  end
+
+  config.vm.provision "shell" do |s|
+    ssh_pub_key = File.readlines("#{Dir.home}/.ssh/id_rsa.pub").first.strip
+    s.inline = <<-SHELL
+      echo #{ssh_pub_key} >> /home/ubuntu/.ssh/authorized_keys
+      echo #{ssh_pub_key} >> /root/.ssh/authorized_keys
+      apt-get -y install python-simplejson
+    SHELL
+  end
+
+  config.vm.define "solr" do |app|
+    app.vm.hostname = "solr.dev"
+    app.vm.network :private_network, ip: "192.168.60.2"
+    app.vm.network "forwarded_port", guest: 8983, host: 8983
+  end
+
+end
