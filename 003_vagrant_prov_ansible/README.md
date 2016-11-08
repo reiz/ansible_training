@@ -16,13 +16,13 @@ After the process is finished you can login to the VM with
 vagrant ssh
 ```
 
-Double check if the NTP process is running:
+Double check if the Nginx process is running:
 
 ```
-ps -ef | grep ntp
+ps -ef | grep nginx
 ```
 
-If everything worked out you should see the NTPD process running, which
+If everything worked out you should see the nginx process running, which
 is defined in the playbook.yml.
 
 Now lets run just the provisioning process again, without rebuilding the whole VM.
@@ -51,4 +51,10 @@ check if Docker is up and running with this command:
 
 ```
 sudo docker info
+```
+
+After your ensured that docker is up and running destroy the VM with:
+
+```
+vagrant destroy -f
 ```
