@@ -16,4 +16,4 @@ Destroy the VM with:
 vagrant destroy -f
 ```
 
-`-f` is for force mode. That will destroy the VM without asking for confirmation.
+The option `-f` is for force mode. That will destroy the VM without asking for confirmation.
