@@ -61,9 +61,59 @@ vagrant box outdated
 Old versions can be removed like in this example:
 
 ```
-vagrant box remove ubuntu/trusty64 --box-version 20161020.0.6
+vagrant box remove ubuntu/xenial64 --box-version 20161029.0.0
 ```
 
-The above command would remove the outdated version `20161020.0.6` of the
-`ubuntu/trusty64` box.
+The above command would remove the outdated version `20161029.0.0` of the
+`ubuntu/xenial64` box.
+
+## Vagrant init & up
+
+By running this command:
+
+```
+vagrant init ubuntu/xenial64
+```
+
+Vagrant will output a Vagrantfile into the current directory.
+A Vagrantfile describes one or multiple virtual machines.
+The generated Vagrantfile is a very simple example with many comments in it.
+It descrbes 1 virtual machines which is bade on the ubuntu/xenial64 box.
+The VM can be started like that:
+
+```
+vagrant up
+```
+
+The `vagrant up` command takes the `Vagrantfile` in the current directory
+and executes it. Running this command the very first time means that the
+Vagrant box which is referenced in the Vagrantfile will be downloaed if it
+is not locally available. After that the VM will be provisioned like described
+in the Vagrantfile.
+
+If everything worked the VM is up and running after a couple minutes. With
+this command we can see the running instances:
+
+```
+vagrant status
+```
+
+The output should show something similar to:
+
+```
+Current machine states:
+
+default                   running (virtualbox)
+
+The VM is running. To stop this VM, you can run `vagrant halt` to
+shut it down forcefully, or you can run `vagrant suspend` to simply
+suspend the virtual machine. In either case, to restart it again,
+simply run `vagrant up`.
+```
+
+With this command we can login to the instance:
+
+```
+vagrant ssh
+```
 
