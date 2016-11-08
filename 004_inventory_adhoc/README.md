@@ -12,6 +12,12 @@ vagrant up
 That will spin up 3 instances. 2 app instances and 1 db instance.
 The inventory file in this directory contains the IP addresses with the correct grouping.
 
+Now we can run ansible with this pattern to execute ad-hoc commands:
+
+```
+ansible multi -m <MODULE> -a <MODULE_ATTRIBUTES> -u <USER>
+```
+
 Now run this command to see if all instances are up:
 
 ```
@@ -31,6 +37,12 @@ Or how much free disk space we have on each server:
 ansible multi -a "df -h" -u root
 ```
 
+Or let's check the Kernel logs on all App servers:
+
+```
+ansible apps -a "tail /var/log/kern.log" -u root
+```
+
 Or let's copy a file to ALL servers:
 
 ```
@@ -42,4 +54,3 @@ Or let's install ufw only on the DB server:
 ```
 ansible dbs -m apt -a "name=ufw state=present" -u root
 ```
-
