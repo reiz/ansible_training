@@ -1,0 +1,48 @@
+---
+- name: Download Solr.
+  get_url:
+    url: "https://archive.apache.org/dist/lucene/solr/{{ solr_version }}/solr-{{ solr_version }}.tgz"
+    dest: "{{ download_dir }}/solr-{{ solr_version }}.tgz"
+    checksum: "{{ solr_checksum }}"
+
+- name: Expand Solr.
+  unarchive:
+    src: "{{ download_dir }}/solr-{{ solr_version }}.tgz"
+    dest: "{{ download_dir }}"
+    copy: no
+    creates: "{{ download_dir }}/solr-{{ solr_version }}/README.txt"
+
+- name: Run Solr installation script.
+  shell: >
+    {{ download_dir }}/solr-{{ solr_version }}/bin/install_solr_service.sh
+    {{ download_dir }}/solr-{{ solr_version }}.tgz
+    -i /opt
+    -d /var/solr
+    -u solr
+    -s solr
+    -p 8983
+    creates={{ solr_dir }}/bin/solr
+
+- name: Ensure solr is started and enabled on boot.
+  service: name=solr state=started enabled=yes
+
+- name: Ensure log rotation
+  lineinfile: >
+    dest=/var/solr/log4j.properties
+    regexp=^log4j.appender.file=
+    line=log4j.appender.file=org.apache.log4j.RollingFileAppender
+  notify: restart solr
+
+- name: Ensure max file size
+  lineinfile: >
+    dest=/var/solr/log4j.properties
+    regexp=^log4j.appender.file.MaxFileSize=
+    line=log4j.appender.file.MaxFileSize={{solr_logs_file_size}}MB
+  notify: restart solr
+
+- name: Ensure max file count
+  lineinfile: >
+    dest=/var/solr/log4j.properties
+    regexp=^log4j.appender.file.MaxBackupIndex=
+    line=log4j.appender.file.MaxBackupIndex={{solr_logs_max_files}}
+  notify: restart solr

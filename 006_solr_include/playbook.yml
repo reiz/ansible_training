@@ -1,0 +1,23 @@
+---
+- hosts: solr
+  user: ubuntu
+  become: true
+
+  vars_files:
+    - variables.yml
+
+  pre_tasks:
+    - name: Update apt cache if needed.
+      apt: update_cache=yes cache_valid_time=3600
+
+  handlers:
+    - name: restart solr
+      service: name=solr state=restarted
+
+  tasks:
+    - include: java.yml
+    - include: solr.yml solr_logs_file_size=5
+
+  post_tasks:
+    - name: Clean up
+      file: path="{{ download_dir }}/solr-{{ solr_version }}.tgz" state=absent
