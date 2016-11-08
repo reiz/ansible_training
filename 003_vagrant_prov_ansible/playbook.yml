@@ -7,8 +7,8 @@
       raw: sudo apt-get -y install python-simplejson
 
   tasks:
-    - name: Ensure NTP is installed
-      apt: name=ntp state=present
+    - name: Ensure nginx is installed
+      apt: name=nginx state=present
 
-    - name: Ensure NTP is running
-      service: name=ntp state=started
+    - name: Ensure nginx is running
+      service: name=nginx state=started
