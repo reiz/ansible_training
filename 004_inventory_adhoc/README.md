@@ -31,3 +31,15 @@ Or how much free disk space we have on each server:
 ansible multi -a "df -h" -u root
 ```
 
+Or let's copy a file to ALL servers:
+
+```
+ansible multi -m copy -a "src=/etc/hosts dest=/tmp/hosts" -u root
+```
+
+Or let's install ufw only on the DB server:
+
+```
+ansible dbs -m apt -a "name=ufw state=present" -u root
+```
+
