@@ -1,0 +1,19 @@
+---
+- hosts: multi
+  user: ubuntu
+  become: true
+  roles:
+    # - commons
+    - { role: nginx, tags: [ 'nginx' ] }
+
+- hosts: apps
+  user: ubuntu
+  become: true
+  roles:
+    - { role: nginx_pages, tags: [ 'pages' ] }
+
+- hosts: lb
+  user: ubuntu
+  become: true
+  roles:
+    - { role: nginx_upstream_update, tags: [ 'upstreams' ] }

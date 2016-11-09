@@ -1,0 +1,55 @@
+---
+- debug: var=groups['lb'][0]
+- debug: var=ansible_enp0s8["ipv4"]["address"]
+
+
+- name: take current upstream out of balancing
+  replace: dest=/etc/nginx/conf.d/default.conf regexp="server {{ ansible_enp0s8["ipv4"]["address"] }}:80 max_fails=1 fail_timeout=10s;" replace='# server {{ ansible_enp0s8["ipv4"]["address"] }}:80 max_fails=1 fail_timeout=10s;'
+  delegate_to: "{{ groups['lb'][0] }}"
+
+- name: reload nginx
+  service: name=nginx state=reloaded
+  delegate_to: "{{ groups['lb'][0] }}"
+
+
+- name: create tmp directory for git
+  file: >
+    state=directory
+    owner=ubuntu
+    group=ubuntu
+    recurse=yes
+    path="/opt/deploy"
+
+- name: checkout git repo into tmp directory
+  git: >
+    repo=https://github.com/reiz/html.git
+    dest="/opt/deploy/html"
+    version=master
+    accept_hostkey=yes
+  become: no
+
+- name: cp index file to nginx
+  command: cp /opt/deploy/html/index.html /var/www/html/index.html
+
+- name: set value on landing page
+  replace: dest=/var/www/html/index.html regexp="<h1>Nginx</h1>" replace='<h1>{{ greeting }}</h1>'
+
+- name: remove working directory
+  file: >
+    state=absent
+    path="/opt/deploy"
+
+- name: reload nginx
+  service: name=nginx state=restarted
+
+- name: wait until app is up and running
+  wait_for: port=80 delay=5
+
+
+- name: take current upstream out of balancing
+  replace: dest=/etc/nginx/conf.d/default.conf regexp="# server {{ ansible_enp0s8["ipv4"]["address"] }}:80 max_fails=1 fail_timeout=10s;" replace='server {{ ansible_enp0s8["ipv4"]["address"] }}:80 max_fails=1 fail_timeout=10s;'
+  delegate_to: "{{ groups['lb'][0] }}"
+
+- name: reload nginx
+  service: name=nginx state=reloaded
+  delegate_to: "{{ groups['lb'][0] }}"

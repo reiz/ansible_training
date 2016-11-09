@@ -1,0 +1,6 @@
+---
+- name: copy index page to server
+  copy: src=index.html dest=/var/www/html/index.html
+
+- name: set value on landing page
+  replace: dest=/var/www/html/index.html regexp="<h1>Nginx</h1>" replace='<h1>{{ greeting }}</h1>'
