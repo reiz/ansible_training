@@ -1,0 +1,9 @@
+---
+- hosts: f1
+  user: ubuntu
+  become: true
+  # gather_facts: no
+  tasks:
+    - debug: var=ansible_os_family
+    - debug: msg="Distribution {{ ansible_distribution }}" verbosity=1
+    - debug: msg="free RAM {{ ansible_memory_mb['real']['free'] }}" verbosity=2
