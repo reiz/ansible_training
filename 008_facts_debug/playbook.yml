@@ -7,3 +7,6 @@
     - debug: var=ansible_os_family
     - debug: msg="Distribution {{ ansible_distribution }}" verbosity=1
     - debug: msg="free RAM {{ ansible_memory_mb['real']['free'] }}" verbosity=2
+    - set_fact: company_url="http://der.com" company_name="DER"
+    - set_fact: server_location="EU"
+    - debug: msg="{{ company_name }} - {{ company_url }} in {{ server_location }}"

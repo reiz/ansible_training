@@ -29,3 +29,9 @@ Extend the playbook and output this facts:
  - Number of CPUs
  - Amount of total RAM
  - Hostname
+
+If you are done, destroy the VM with:
+
+```
+vagrant destroy -f
+```
