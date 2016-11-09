@@ -1,0 +1,22 @@
+
+upstream apps {
+  {% for host in groups['apps'] %}
+    server {{ hostvars[host]['ansible_enp0s8']['ipv4']['address'] }}:80 max_fails=1 fail_timeout=10s;
+  {% endfor %}
+}
+
+server {
+  listen 80;
+
+  location / {
+    proxy_redirect off;
+    proxy_set_header Host $http_host;
+    proxy_set_header X-Forwarded-Proto https;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+
+    proxy_pass http://apps;
+    proxy_next_upstream error timeout;
+  }
+
+}
