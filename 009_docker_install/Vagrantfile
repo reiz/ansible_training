@@ -1,0 +1,40 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+
+  config.vm.synced_folder ".", "/vagrant", disabled: true
+
+  config.vm.provider "virtualbox" do |vb|
+    vb.memory = 1024
+    vb.cpus = 2
+  end
+
+  config.vm.provision "shell" do |s|
+    ssh_pub_key = File.readlines("#{Dir.home}/.ssh/id_rsa.pub").first.strip
+    s.inline = <<-SHELL
+      echo #{ssh_pub_key} >> /home/ubuntu/.ssh/authorized_keys
+      echo #{ssh_pub_key} >> /root/.ssh/authorized_keys
+      apt-get -y install python-simplejson
+    SHELL
+  end
+
+  config.vm.define "ubuntu14" do |app|
+    app.vm.box = "ubuntu/trusty64"
+    app.vm.hostname = "ubuntu14"
+    app.vm.network :private_network, ip: "192.168.60.14"
+  end
+
+  config.vm.define "ubuntu15" do |app|
+    app.vm.box = "ubuntu/vivid64"
+    app.vm.hostname = "ubuntu15"
+    app.vm.network :private_network, ip: "192.168.60.15"
+  end
+
+  config.vm.define "ubuntu16" do |app|
+    app.vm.box = "ubuntu/xenial64"
+    app.vm.hostname = "ubuntu16"
+    app.vm.network :private_network, ip: "192.168.60.16"
+  end
+
+end

@@ -1,0 +1,7 @@
+---
+- hosts: ubuntu14
+  user: ubuntu
+  become: true
+  roles:
+    - commons
+    - docker

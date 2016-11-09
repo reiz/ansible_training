@@ -1,0 +1,45 @@
+---
+- name: get uname -r
+  command: uname -r
+  register: uname
+  changed_when: false
+
+- name: install AUFS
+  apt: name={{ item }} state=present
+  with_items:
+   - linux-image-extra-{{ uname.stdout }}
+
+- name: get public key for Docker
+  command: apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 58118E89F3A912897C070ADBF76221572C52609D
+
+- name: add Docker debian server to the list of servers
+  copy: src=ubuntu14_docker.list dest=/etc/apt/sources.list.d/docker.list
+  when:
+      - ansible_distribution == "Ubuntu"
+      - ansible_distribution_major_version == "14"
+
+- name: update debian packages
+  apt: update_cache=true
+  ignore_errors: True
+
+- name: install docker
+  apt: name={{ item }} state=present
+  with_items:
+   - docker-engine
+
+- name: start docker service
+  service: name=docker state=started
+
+- name: start docker service on reboot
+  shell: update-rc.d docker defaults
+  ignore_errors: True
+
+- name: install docker-compose
+  shell: curl -L https://github.com/docker/compose/releases/download/1.8.1/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
+
+- name: make docker-compose executable
+  shell: chmod +x /usr/local/bin/docker-compose
+
+- name: reboot
+  shell: reboot
+  when: "{{ reboot_machine }}"
