@@ -1,0 +1,8 @@
+---
+- hosts: multi
+  user: ubuntu
+  become: true
+  roles:
+    - commons
+    - docker
+    - docker_compose
