@@ -26,7 +26,7 @@ Vagrant.configure("2") do |config|
   end
 
   config.vm.define "ubuntu15" do |app|
-    app.vm.box = "ubuntu/vivid64"
+    app.vm.box = "ubuntu/wily64"
     app.vm.hostname = "ubuntu15"
     app.vm.network :private_network, ip: "192.168.60.15"
   end

@@ -31,8 +31,8 @@ These are the Debian repositories which has to be copied to the server depending
 # Ubuntu 14.04
 deb https://apt.dockerproject.org/repo ubuntu-trusty main
 
-# Ubuntu 15.04
-deb https://apt.dockerproject.org/repo ubuntu-vivid main
+# Ubuntu 15.10
+deb https://apt.dockerproject.org/repo ubuntu-wily main
 
 # Ubuntu 16.04
 deb https://apt.dockerproject.org/repo ubuntu-xenial main
