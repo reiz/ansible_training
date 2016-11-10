@@ -12,7 +12,7 @@ run:
 ansible-playbook setup.yml
 ```
 
-to setup the example application for the load balancer:
+to setup the example application for the rolling update:
 
 --- LIVE DEMO ---
 
