@@ -1,0 +1,12 @@
+---
+- hosts: server
+  user: ubuntu
+  become: yes
+  gather_facts: no
+
+  tasks:
+    - name: Start home made module
+      mod00: msg="Guten Abend!"
+      register: mod_output
+
+    - debug: var=mod_output
