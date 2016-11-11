@@ -1,0 +1,14 @@
+---
+- hosts: app
+  user: ubuntu
+  become: true
+  roles:
+    - commons
+    - java
+
+- hosts: lb
+  user: ubuntu
+  become: true
+  roles:
+    - commons
+    - nginx

@@ -1,0 +1,8 @@
+---
+- hosts: apps
+  user: ubuntu
+  become: true
+  serial: 1
+  max_fail_percentage: 10
+  roles:
+    - deploy_html
