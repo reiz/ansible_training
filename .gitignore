@@ -22,3 +22,4 @@ pickle-email-*.html
 .env
 
 019_profitbricks_dyn_inventory/passwd
+020_profitbricks_dyn_inventory/passwd
