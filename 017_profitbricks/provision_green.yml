@@ -1,0 +1,47 @@
+---
+  - hosts: localhost
+    connection: local
+    gather_facts: False
+
+    vars_prompt:
+      - name: "password"
+        prompt: "What is your password for the Profitbricks API?"
+
+    tasks:
+      - name: Provision a set of instances
+        profitbricks:
+          subscription_user: support@versioneye.com
+          subscription_password: "{{ password }}"
+          location: de/fra
+          datacenter: dc_green
+          count: 1
+          cores: 1
+          ram: 2048
+          volume_size: 50
+          image: e4bf3280-a1ca-11e6-addc-525400f64d8d
+          image_password: 'test7test'
+          assign_public_ip: true
+          name: test%02d.demo.com
+          state: present
+          wait_timeout: 300
+        register: profitbricks
+
+      # - debug: msg="{{ profitbricks }}"
+      # - debug: msg="{{ profitbricks.machines[0] }}"
+
+      - name: Add new instance to profitbricks group
+        add_host: name={{ profitbricks.machines[0].public_ip }} groups=profitbricks
+
+      - name: Wait for SSH to come up
+        wait_for: host={{ profitbricks.machines[0].public_ip }} port=22 delay=60 timeout=320 state=started
+
+
+  - hosts: profitbricks
+    user: root
+    gather_facts: False
+    pre_tasks:
+      - name: 'install python2'
+        raw: sudo apt-get -y install python-simplejson
+    roles:
+      - commons
+      - java

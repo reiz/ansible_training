@@ -1,0 +1,24 @@
+---
+  - hosts: localhost
+    connection: local
+    gather_facts: False
+
+    vars_prompt:
+      - name: "password"
+        prompt: "What is your password for the Profitbricks API?"
+
+    roles:
+      - { role: provision_vm, vm_count: 3, dc: dc_green }
+
+
+  - hosts: profitbricks
+    user: root
+    gather_facts: False
+
+    pre_tasks:
+      - name: 'install python2'
+        raw: sudo apt-get -y install python-simplejson
+
+    roles:
+      - commons
+      - java
