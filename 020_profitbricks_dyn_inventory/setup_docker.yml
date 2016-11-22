@@ -1,0 +1,7 @@
+---
+  - hosts: profitbricks
+    user: root
+    gather_facts: False
+    roles:
+      - docker
+      - docker_compose
