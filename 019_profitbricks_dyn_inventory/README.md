@@ -1,6 +1,13 @@
 # Dynamic Inventory
 
 Take a look to the `inventory.rb` file and try to understand it.
+You can query the Profitbricks API like this:
+
+```
+curl --include --request GET --user 'USERNAME:PASSWORD' https://api.profitbricks.com/rest/v2/datacenters
+```
+
+Just replace `USERNAME` with your username and `PASSWORD` with your password.
 
 -- LIVE DEMO ---
 
