@@ -5,16 +5,12 @@ Vagrant.configure("2") do |config|
 
   config.vm.synced_folder ".", "/vagrant", disabled: true
 
-  config.vm.provider "virtualbox" do |vb|
-    vb.memory = 512
-    vb.cpus = 1
-  end
-
   config.vm.provision "shell" do |s|
     ssh_pub_key = File.readlines("#{Dir.home}/.ssh/id_rsa.pub").first.strip
     s.inline = <<-SHELL
       echo #{ssh_pub_key} >> /home/ubuntu/.ssh/authorized_keys
       echo #{ssh_pub_key} >> /root/.ssh/authorized_keys
+      apt-get -y update
       apt-get -y install python-simplejson
     SHELL
   end
@@ -24,6 +20,10 @@ Vagrant.configure("2") do |config|
     app.vm.hostname = "lb"
     app.vm.network :private_network, ip: "192.168.60.17"
     app.vm.network "forwarded_port", guest: 80, host: 8080
+    app.vm.provider "virtualbox" do |vb|
+      vb.memory = 256
+      vb.cpus = 1
+    end
   end
 
   config.vm.define "app1" do |app|
@@ -31,6 +31,10 @@ Vagrant.configure("2") do |config|
     app.vm.hostname = "app1"
     app.vm.network :private_network, ip: "192.168.60.18"
     app.vm.network "forwarded_port", guest: 80, host: 8081
+    app.vm.provider "virtualbox" do |vb|
+      vb.memory = 512
+      vb.cpus = 1
+    end
   end
 
   config.vm.define "app2" do |app|
@@ -38,6 +42,10 @@ Vagrant.configure("2") do |config|
     app.vm.hostname = "app2"
     app.vm.network :private_network, ip: "192.168.60.19"
     app.vm.network "forwarded_port", guest: 80, host: 8082
+    app.vm.provider "virtualbox" do |vb|
+      vb.memory = 512
+      vb.cpus = 1
+    end
   end
 
 end
